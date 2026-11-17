@@ -1,72 +1,96 @@
 """
-Lab 2.2 – Comprehensions and Transformations
---------------------------------------------
-Practice list, set and dictionary comprehensions.
+Lab 2.1 – Simple Datasets and Aggregates
+----------------------------------------
+Practice lists, dictionaries and tuples by computing simple aggregates.
 
-Write these functions. Each one should return a SINGLE comprehension
-(one line after `return`), not a for loop that appends:
-- squares(numbers)      -> list : the square of each number, same order
-- positives(numbers)    -> list : only the numbers greater than 0
-                                  (0 is NOT positive), same order
-- even_squares(numbers) -> set  : the squares of the EVEN numbers only
-                                  (0 and negative even numbers count too)
-- cubes(numbers)        -> dict : maps each number to its cube
+Write these functions:
+- average(values)               -> float
+    Average of a list of numbers. Return 0.0 if the list is empty.
+- largest_city(populations)     -> tuple (name, population)
+    The city with the LARGEST population.
+- smallest_city(populations)    -> tuple (name, population)
+    The city with the SMALLEST population.
+- total_population(populations) -> int
+    Sum of all populations. Return 0 if the dict is empty.
 
-In the main block: use the list NUMBERS below, call each function and
-print the results.
+`populations` is a dictionary like {"Riga": 605000, "Daugavpils": 78000}.
+For largest_city() and smallest_city():
+- If two cities tie, return the one that comes FIRST in the dictionary.
+- If the dictionary is empty, return ("", 0).
+- Built-ins such as sum(), len(), max() and min() are allowed.
+  Hint: max(populations, key=populations.get) gives the key with the
+  largest value.
 
-Example run:
-    Squares: [9, 64, 4, 49, 0, 25, 100]
-    Positives: [3, 8, 7, 10]
-    Even squares: {64, 0, 4, 100}      (a set has no fixed order)
-    Cubes: {3: 27, 8: 512, -2: -8, 7: 343, 0: 0, -5: -125, 10: 1000}
+In the main block: create your OWN datasets (a list `temperatures` with
+7 daily temperatures, and a dict `city_population` with at least 5 cities),
+call the functions, and print the results. Print the average with
+1 decimal place.
+
+Example run (with your own data the numbers will differ):
+    Average temperature: 4.3
+    Largest city: Riga - 605000
+    Smallest city: Valmiera - 23000
+    Total population: 806000
 
 Examples (these are also used to check your work):
->>> squares([1, -2, 3])
-[1, 4, 9]
->>> squares(NUMBERS)
-[9, 64, 4, 49, 0, 25, 100]
->>> positives(NUMBERS)
-[3, 8, 7, 10]
->>> sorted(even_squares(NUMBERS))
-[0, 4, 64, 100]
->>> type(even_squares(NUMBERS))
-<class 'set'>
->>> cubes([2, -3])
-{2: 8, -3: -27}
->>> squares([]), positives([]), even_squares([]), cubes([])
-([], [], set(), {})
+>>> average([1, 2, 3, 4])
+2.5
+>>> average([])
+0.0
+>>> cities = {"Riga": 605000, "Daugavpils": 78000, "Liepaja": 67000}
+>>> largest_city(cities)
+('Riga', 605000)
+>>> smallest_city(cities)
+('Liepaja', 67000)
+>>> total_population(cities)
+750000
+>>> largest_city({})
+('', 0)
+>>> largest_city({"A": 10, "B": 10})
+('A', 10)
 """
 
-NUMBERS = [3, 8, -2, 7, 0, -5, 10]
+
+def average(values: list[float]) -> float:
+    """Return the average of values, or 0.0 for an empty list."""
+    return sum(values) / len(values) if values else 0.0
 
 
-def squares(numbers: list[int]) -> list[int]:
-    """Return a list with the square of each number (list comprehension)."""
-    # TODO: implement with a list comprehension
-    raise NotImplementedError("squares() is not implemented yet")
+def largest_city(populations: dict[str, int]) -> tuple[str, int]:
+    """Return (city, population) for the city with the largest population."""
+    if not populations:
+        return ("", 0)
+    city = max(populations, key=populations.get)
+    return (city, populations[city])
 
 
-def positives(numbers: list[int]) -> list[int]:
-    """Return only the numbers greater than 0 (list comprehension)."""
-    # TODO: implement with a list comprehension
-    raise NotImplementedError("positives() is not implemented yet")
+def smallest_city(populations: dict[str, int]) -> tuple[str, int]:
+    """Return (city, population) for the city with the smallest population."""
+    if not populations:
+        return ("", 0)
+    city = min(populations, key=populations.get)
+    return (city, populations[city])
 
 
-def even_squares(numbers: list[int]) -> set[int]:
-    """Return a set of the squares of the even numbers (set comprehension)."""
-    # TODO: implement with a set comprehension
-    raise NotImplementedError("even_squares() is not implemented yet")
-
-
-def cubes(numbers: list[int]) -> dict[int, int]:
-    """Return a dict mapping each number to its cube (dict comprehension)."""
-    # TODO: implement with a dict comprehension
-    raise NotImplementedError("cubes() is not implemented yet")
+def total_population(populations: dict[str, int]) -> int:
+    """Return the sum of all populations."""
+    return sum(populations.values())
 
 
 if __name__ == "__main__":
-    # Keep all input() and print() calls inside this block, otherwise the
-    # autograder cannot import your file.
-    # TODO: call each function with NUMBERS and print the results
-    pass
+    temperatures = [2.5, 3.0, 4.2, 5.1, 1.8, 6.0, 3.7]
+    city_population = {
+        "Riga": 605000,
+        "Daugavpils": 78000,
+        "Liepaja": 67000,
+        "Jelgava": 55000,
+        "Jurmala": 50000,
+    }
+
+    largest = largest_city(city_population)
+    smallest = smallest_city(city_population)
+
+    print(f"Average temperature: {average(temperatures):.1f}")
+    print(f"Largest city: {largest[0]} - {largest[1]}")
+    print(f"Smallest city: {smallest[0]} - {smallest[1]}")
+    print(f"Total population: {total_population(city_population)}")
